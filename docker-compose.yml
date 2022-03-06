@@ -18,6 +18,8 @@ services:
   authserver:
     container_name: authserver
     image: thallosaurus.de/cyberpsych0siis/authserver:main
+    labels:
+      - traefik.http.routers.login.middlewares=errorcats@docker
     networks:
       - frontend
 
@@ -30,6 +32,8 @@ services:
   httpcats:
     container_name: errorpages-cats
     image: thallosaurus.de/cyberpsych0siis/traefik-http-cats:main
+    labels:
+      - traefik.http.routers.frontpage.middlewares=target_is_static@file,errorcats@docker
     networks:
       - frontend
 
