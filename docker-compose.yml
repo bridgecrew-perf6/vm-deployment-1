@@ -84,7 +84,7 @@ services:
 #      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
     labels:
       - "traefik.port=8085"
-      - "traefik.http.routers.vscodehost.entrypoints=web"
+      # - "traefik.http.routers.vscodehost.entrypoints=web"
       - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`) || Path(`/socket`)"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
