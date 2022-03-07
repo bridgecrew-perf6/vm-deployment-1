@@ -62,7 +62,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
     labels:
       - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
-      - "traefik.http.routers.frontpage.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/`)"
+      - "traefik.http.routers.frontpage.rule=PathPrefix(`/`)"
     networks:
       - frontend
 
