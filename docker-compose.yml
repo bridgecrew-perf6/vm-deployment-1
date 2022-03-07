@@ -2,7 +2,6 @@ version: '2'
 
 services:
   edge:
-    #image: thallosaurus.de/cyberpsych0siis/traefik:main
     image: traefik:v2.6
     command:
       - --pilot.token=$TRAEFIK_PILOT
@@ -34,7 +33,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
       - traefik.http.routers.login.middlewares=errorcats
-      - traefik.http.routers.login.rule=Host(`$SUBDOMAIN`) && ((Path(`/login`) && Method(`POST`)) || Path(`/logout`))
+      - traefik.http.routers.login.rule=(Path(`/login`) && Method(`POST`)) || (Path(`/logout`))
     networks:
       - frontend
 
@@ -43,7 +42,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
     labels:
       - "traefik.http.routers.loginui.middlewares=target_is_static"
-      - "traefik.http.routers.loginui.rule=Host(`$SUBDOMAIN`) && (PathPrefix(`/login`) && Method(`GET`))"
+      - "traefik.http.routers.loginui.rule=PathPrefix(`/login`) && Method(`GET`)"
     networks:
       - frontend
 
@@ -61,7 +60,6 @@ services:
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
     labels:
       - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
-      - "traefik.http.routers.frontpage.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/`)"
     networks:
       - frontend
 
@@ -69,7 +67,7 @@ services:
     container_name: userarea
     image: thallosaurus.de/cyberpsych0siis/userarea:dev
     labels:
-      - "traefik.http.routers.userarea.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/user`)"
+      - "traefik.http.routers.userarea.rule=PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
@@ -81,13 +79,13 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - "SUBDOMAIN=$SUBDOMAIN"
+      - "SUBDOMAIN=rillo5000.com"
       - "NETWORK_ID=$NETWORK_ID"
 #      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
     labels:
       - "traefik.port=8085"
       - "traefik.http.routers.vscodehost.entrypoints=web"
-      - "traefik.http.routers.vscodehost.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/vm`)"
+      - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`) || Path(`/socket`)"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
