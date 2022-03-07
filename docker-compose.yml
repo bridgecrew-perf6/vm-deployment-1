@@ -12,6 +12,14 @@ services:
       - --api.dashboard=true
       - --api.insecure=true
       - --providers.docker
+    labels:
+        #=http://authserver:9000/auth?onfail=/signin
+      - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
+      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
+      - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
+      - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm"
+      - "traefik.http.middlewares.auth_then_strip.chain.middlewares=auth,target_is_static"
+      - "traefik.http.middlewares.vscode-uuid-strip.stripprefixregex.regex=/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     ports:
       - "80:80"
       - "8080:8080"
