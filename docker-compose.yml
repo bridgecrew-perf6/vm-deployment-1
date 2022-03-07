@@ -49,15 +49,18 @@ services:
 
   httpcats:
     container_name: errorpages-cats
-    image: thallosaurus.de/cyberpsych0siis/traefik-http-cats:main
+    image: thallosaurus.de/cyberpsych0siis/traefik-http-cats:dev
     labels:
-      - traefik.http.routers.frontpage.middlewares=target_is_static@file,errorcats@docker
+      - "traefik.http.middlewares.errorcats.errors.query=/?code={status}"
+      - "traefik.http.middlewares.errorcats.errors.status=404,403,418,500-599"
     networks:
       - frontend
 
   frontpage:
     container_name: frontpage
-    image: thallosaurus.de/cyberpsych0siis/frontpage:main
+    image: thallosaurus.de/cyberpsych0siis/frontpage:dev
+    labels:
+      - "traefik.http.routers.frontpage.middlewares=target_is_static@docker,errorcats@docker"
     networks:
       - frontend
 
@@ -70,13 +73,18 @@ services:
   vmhost:
     restart: unless-stopped
     container_name: vmhost
-    image: thallosaurus.de/cyberpsych0siis/dockervm:main
+    image: thallosaurus.de/cyberpsych0siis/dockervm:dev
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
       - "SUBDOMAIN=rillo5000.com"
       - "NETWORK_ID=$NETWORK_ID"
 #      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
+    labels:
+      - "traefik.port=8085"
+      - "traefik.http.routers.vscodehost.entrypoints=web"
+      - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`)"
+      - "traefik.http.routers.vscodehost.middlewares=auth_then_strip@docker,errorcats@docker"
     networks:
       - frontend
 
