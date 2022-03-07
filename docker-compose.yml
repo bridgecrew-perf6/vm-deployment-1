@@ -2,9 +2,16 @@ version: '2'
 
 services:
   edge:
-    image: thallosaurus.de/cyberpsych0siis/traefik:main
+    #image: thallosaurus.de/cyberpsych0siis/traefik:main
+    image: traefik:v2.6
     command:
       - --pilot.token=$TRAEFIK_PILOT
+      - --entryPoints.web.address=$TRAEFIK_HTTP_LISTEN_PORT
+      - --entryPoints.web.forwardedHeaders.insecure=true
+      - --entryPoints.websecure.address=$TRAEFIK_HTTPS_LISTEN_PORT
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker
     ports:
       - "80:80"
       - "8080:8080"
