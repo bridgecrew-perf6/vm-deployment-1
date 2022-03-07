@@ -31,7 +31,7 @@ services:
 
   authserver:
     container_name: authserver
-    image: thallosaurus.de/cyberpsych0siis/authserver:main
+    image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
       - traefik.http.routers.login.middlewares=errorcats@docker
     networks:
