@@ -40,7 +40,10 @@ services:
 
   loginui:
     container_name: loginui
-    image: thallosaurus.de/cyberpsych0siis/logon-ui:main
+    image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
+    labels:
+      - "traefik.http.routers.loginui.middlewares=target_is_static@docker"
+      - "traefik.http.routers.loginui.rule=PathPrefix(`/login`) && Method(`GET`)"
     networks:
       - frontend
 
