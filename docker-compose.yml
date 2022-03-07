@@ -80,7 +80,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - "SUBDOMAIN=rillo5000.com"
+      - "SUBDOMAIN=$SUBDOMAIN"
       - "NETWORK_ID=$NETWORK_ID"
 #      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
     labels:
