@@ -5,6 +5,8 @@ services:
     image: traefik:v2.6
     command:
       - --pilot.token=$TRAEFIK_PILOT
+      - --log.filePath=/var/log/traefik.log
+      - --accesslog.filepath=/var/log/access.log
       - --entryPoints.web.address=$TRAEFIK_HTTP_LISTEN_HOST:$TRAEFIK_HTTP_LISTEN_PORT
       - --entryPoints.web.forwardedHeaders.insecure=true
       - --entryPoints.websecure.address=$TRAEFIK_HTTPS_LISTEN_HOST:$TRAEFIK_HTTPS_LISTEN_PORT
