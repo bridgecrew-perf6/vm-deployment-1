@@ -78,7 +78,7 @@ services:
       
   garbagecollector:
     container_name: gc
-    image: spotify/docker-gc
+    image: thallosaurus.de/cyberpsych0siis/garbage-collector
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
 networks:
