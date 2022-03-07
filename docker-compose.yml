@@ -13,7 +13,6 @@ services:
       - --api.insecure=true
       - --providers.docker
     labels:
-        #=http://authserver:9000/auth?onfail=/signin
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
       - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
       - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
