@@ -66,7 +66,10 @@ services:
 
   userarea:
     container_name: userarea
-    image: thallosaurus.de/cyberpsych0siis/userarea:main
+    image: thallosaurus.de/cyberpsych0siis/userarea:dev
+    labels:
+      - "traefik.http.routers.userarea.rule=PathPrefix(`/user`)"
+      - "traefik.http.routers.userarea.middlewares=auth_then_strip@docker,errorcats@docker"
     networks:
       - frontend
 
