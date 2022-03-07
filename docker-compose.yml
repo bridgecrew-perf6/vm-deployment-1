@@ -53,7 +53,7 @@ services:
     labels:
       - "traefik.http.middlewares.errorcats.errors.query=/?code={status}"
       - "traefik.http.middlewares.errorcats.errors.status=404,403,418,500-599"
-      - traefik.http.middlewares.errorcats.errors.service=httpcats-prod
+      - "traefik.http.middlewares.errorcats.errors.service=$ERRORPAGE_HANDLER_SERVICE"
     networks:
       - frontend
   frontpage:
