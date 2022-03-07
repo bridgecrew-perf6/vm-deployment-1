@@ -34,7 +34,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
       - traefik.http.routers.login.middlewares=errorcats
-      - traefik.http.routers.login.rule=(Path(`/login`) && Method(`POST`)) || (Path(`/logout`))
+      - traefik.http.routers.login.rule=Host(`$SUBDOMAIN`) && ((Path(`/login`) && Method(`POST`)) || Path(`/logout`))
     networks:
       - frontend
 
@@ -43,7 +43,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
     labels:
       - "traefik.http.routers.loginui.middlewares=target_is_static"
-      - "traefik.http.routers.loginui.rule=PathPrefix(`/login`) && Method(`GET`)"
+      - "traefik.http.routers.loginui.rule=Host(`$SUBDOMAIN`) && (PathPrefix(`/login`) && Method(`GET`))"
     networks:
       - frontend
 
@@ -68,7 +68,7 @@ services:
     container_name: userarea
     image: thallosaurus.de/cyberpsych0siis/userarea:dev
     labels:
-      - "traefik.http.routers.userarea.rule=PathPrefix(`/user`)"
+      - "traefik.http.routers.userarea.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
@@ -86,7 +86,7 @@ services:
     labels:
       - "traefik.port=8085"
       - "traefik.http.routers.vscodehost.entrypoints=web"
-      - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`)"
+      - "traefik.http.routers.vscodehost.rule=Host(`$SUBDOMAIN`) && PathPrefix(`/vm`)"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
