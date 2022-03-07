@@ -55,7 +55,6 @@ services:
       - "traefik.http.middlewares.errorcats.errors.status=404,403,418,500-599"
     networks:
       - frontend
-
   frontpage:
     container_name: frontpage
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
