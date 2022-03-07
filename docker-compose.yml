@@ -75,7 +75,12 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./.docker/config.json:/config.json"
-
+      
+  garbagecollector:
+    container_name: gc
+    image: spotify/docker-gc
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 networks:
   vm:
     external: true
