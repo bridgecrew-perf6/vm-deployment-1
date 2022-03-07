@@ -33,7 +33,7 @@ services:
     container_name: authserver
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
-      - traefik.http.routers.login.middlewares=errorcats@docker
+      - traefik.http.routers.login.middlewares=errorcats
       - traefik.http.routers.login.rule=(Path(`/login`) && Method(`POST`)) || (Path(`/logout`))
     networks:
       - frontend
@@ -42,7 +42,7 @@ services:
     container_name: loginui
     image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
     labels:
-      - "traefik.http.routers.loginui.middlewares=target_is_static@docker"
+      - "traefik.http.routers.loginui.middlewares=target_is_static"
       - "traefik.http.routers.loginui.rule=PathPrefix(`/login`) && Method(`GET`)"
     networks:
       - frontend
@@ -60,7 +60,7 @@ services:
     container_name: frontpage
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
     labels:
-      - "traefik.http.routers.frontpage.middlewares=target_is_static@docker,errorcats@docker"
+      - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
     networks:
       - frontend
 
@@ -69,7 +69,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/userarea:dev
     labels:
       - "traefik.http.routers.userarea.rule=PathPrefix(`/user`)"
-      - "traefik.http.routers.userarea.middlewares=auth_then_strip@docker,errorcats@docker"
+      - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
 
@@ -87,7 +87,7 @@ services:
       - "traefik.port=8085"
       - "traefik.http.routers.vscodehost.entrypoints=web"
       - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`)"
-      - "traefik.http.routers.vscodehost.middlewares=auth_then_strip@docker,errorcats@docker"
+      - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
 
