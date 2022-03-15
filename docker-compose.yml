@@ -91,7 +91,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - "SUBDOMAIN=rillo5000.com"
+      - "SUBDOMAIN=$SUBDOMAIN"
       - "NETWORK_ID=$NETWORK_ID"
       - "DOCKER_REGISTRY_USERNAME=$DOCKER_REGISTRY_USERNAME"
       - "DOCKER_REGISTRY_PASSWORD=$DOCKER_REGISTRY_PASSWORD"
