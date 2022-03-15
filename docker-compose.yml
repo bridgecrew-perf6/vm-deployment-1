@@ -93,19 +93,19 @@ services:
     networks:
       - frontend
 
-  watchtower:
-    container_name: watchtower
-    image: containrrr/watchtower
-    command: --http-api-update --debug
-    environment:
-      - WATCHTOWER_HTTP_API_TOKEN=$WATCHTOWER_HTTP_API_TOKEN
-    labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-    ports:
-      - "42069:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./.docker/config.json:/config.json"
+  #watchtower:
+  #  container_name: watchtower
+  #  image: containrrr/watchtower
+  #  command: --http-api-update --debug
+  #  environment:
+  #    - WATCHTOWER_HTTP_API_TOKEN=$WATCHTOWER_HTTP_API_TOKEN
+  #  labels:
+  #    - "com.centurylinklabs.watchtower.enable=false"
+  #  ports:
+  #    - "42069:8080"
+  #  volumes:
+  #    - "/var/run/docker.sock:/var/run/docker.sock"
+  #    - "./.docker/config.json:/config.json"
       
   garbagecollector:
     container_name: gc
