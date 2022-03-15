@@ -75,6 +75,15 @@ services:
     networks:
       - frontend
 
+  dockerui:
+    container_name: dockerui
+    image: thallosaurus.de/cyberpsych0siis/container-gui
+    labels:
+      - "traefik.http.routers.vscodehost.rule=(PathPrefix(`/vm`) && !Path(`/vm/socket`))"
+      - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
+    networks:
+      - frontend
+
   vmhost:
     restart: unless-stopped
     container_name: vmhost
@@ -88,30 +97,10 @@ services:
     labels:
       - "traefik.port=8085"
       # - "traefik.http.routers.vscodehost.entrypoints=web"
-      - "traefik.http.routers.vscodehost.rule=PathPrefix(`/vm`)"
+      - "traefik.http.routers.vscodehost.rule=Path(`/vm/socket`)"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
-
-  #watchtower:
-  #  container_name: watchtower
-  #  image: containrrr/watchtower
-  #  command: --http-api-update --debug
-  #  environment:
-  #    - WATCHTOWER_HTTP_API_TOKEN=$WATCHTOWER_HTTP_API_TOKEN
-  #  labels:
-  #    - "com.centurylinklabs.watchtower.enable=false"
-  #  ports:
-  #    - "42069:8080"
-  #  volumes:
-  #    - "/var/run/docker.sock:/var/run/docker.sock"
-  #    - "./.docker/config.json:/config.json"
-      
-  garbagecollector:
-    container_name: gc
-    image: thallosaurus.de/cyberpsych0siis/garbage-collector
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
 networks:
   vm:
     external: true
