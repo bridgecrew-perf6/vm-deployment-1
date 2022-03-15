@@ -93,6 +93,10 @@ services:
     environment:
       - "SUBDOMAIN=rillo5000.com"
       - "NETWORK_ID=$NETWORK_ID"
+      - "DOCKER_REGISTRY_USERNAME=$DOCKER_REGISTRY_USERNAME"
+      - "DOCKER_REGISTRY_PASSWORD=$DOCKER_REGISTRY_PASSWORD"
+      - "DOCKER_REGISTRY_ADDRESS=$DOCKER_REGISTRY_ADDRESS"
+      - "DOCKER_REGISTRY_EMAIL=$DOCKER_REGISTRY_EMAIL"
 #      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
     labels:
       - "traefik.port=8085"
