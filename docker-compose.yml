@@ -101,7 +101,7 @@ services:
     labels:
       - "traefik.port=8085"
       # - "traefik.http.routers.vscodehost.entrypoints=web"
-      - "traefik.http.routers.vscodehost.rule=Path(`/vm/socket`) || (Host(`*.$SUBDOMAIN`) && Path(`/_logs`))"
+      - "traefik.http.routers.vscodehost.rule=Path(`/vm/socket`) || (Host(`*.$SUBDOMAIN`) && Path(`/_logs`)) || (PathPrefix(`/vm/api`))"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
