@@ -77,7 +77,7 @@ services:
 
   dockerui:
     container_name: dockerui
-    image: thallosaurus.de/cyberpsych0siis/container-gui
+    image: thallosaurus.de/cyberpsych0siis/container-gui:main
     labels:
       - "traefik.http.routers.vscodehost.rule=(PathPrefix(`/vm`) && !Path(`/vm/socket`))"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
