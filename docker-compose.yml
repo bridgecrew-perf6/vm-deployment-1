@@ -38,7 +38,6 @@ services:
       - traefik.http.routers.login.rule=(Path(`/login`) && Method(`POST`)) || (Path(`/logout`))
     networks:
       - frontend
-      - ldap
 
   loginui:
     container_name: loginui
@@ -108,7 +107,5 @@ services:
       - frontend
 networks:
   vm:
-    external: true
-  ldap:
     external: true
   frontend:
