@@ -10,6 +10,10 @@ services:
       - --entryPoints.web.address=$TRAEFIK_HTTP_LISTEN_HOST:$TRAEFIK_HTTP_LISTEN_PORT
       - --entryPoints.web.forwardedHeaders.insecure=true
       - --entryPoints.websecure.address=$TRAEFIK_HTTPS_LISTEN_HOST:$TRAEFIK_HTTPS_LISTEN_PORT
+      - --certificatesresolvers.myresolver.acme.email=$LETS_ENCRYPT_EMAIL
+      - --certificatesresolvers.myresolver.acme.storage=acme.json
+      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --api.dashboard=true
       - --api.insecure=true
       - --providers.docker
