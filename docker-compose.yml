@@ -5,7 +5,6 @@ services:
     image: traefik:v2.6
     command:
       - --log.level=DEBUG
-      - --log.filePath=/var/log/traefik.log
       - --pilot.token=$TRAEFIK_PILOT
       - --log.filePath=/var/log/traefik.log
       - --accesslog.filepath=/var/log/access.log
