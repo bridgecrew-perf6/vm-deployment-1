@@ -41,7 +41,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
       - traefik.http.routers.login.middlewares=errorcats
-      - traefik.http.routers.login.rule=(Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
+      - traefik.http.routers.login.rule=Host(`$DOMAIN`) && (Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
       - traefik.http.routers.login.tls.certResolver=myresolver
     networks:
       - frontend
@@ -51,7 +51,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
     labels:
       - "traefik.http.routers.loginui.middlewares=target_is_static"
-      - "traefik.http.routers.loginui.rule=PathPrefix(`/login`) && Method(`GET`)"
+      - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && PathPrefix(`/login`) && Method(`GET`)"
       - "traefik.http.routers.loginui.tls.certResolver=myresolver"
     networks:
       - frontend
@@ -65,12 +65,13 @@ services:
       - "traefik.http.middlewares.errorcats.errors.service=$ERRORPAGE_HANDLER_SERVICE"
     networks:
       - frontend
+
   frontpage:
     container_name: frontpage
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
     labels:
       - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
-      - "traefik.http.routers.frontpage.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontpage.rule=Host(`$DOMAIN`) && PathPrefix(`/`)"
       - "traefik.http.routers.frontpage.tls.certResolver=myresolver"
     networks:
       - frontend
@@ -79,7 +80,7 @@ services:
     container_name: userarea
     image: thallosaurus.de/cyberpsych0siis/userarea:dev
     labels:
-      - "traefik.http.routers.userarea.rule=PathPrefix(`/user`)"
+      - "traefik.http.routers.userarea.rule=Host(`$DOMAIN`) && PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
       - "traefik.http.routers.userarea.tls.certResolver=myresolver"
     networks:
@@ -90,7 +91,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/container-gui:main
     labels:
       - "traefik.http.routers.containerui.tls.certResolver=myresolver"
-      - "traefik.http.routers.containerui.rule=(PathPrefix(`/vm`) && !Path(`/vm/socket`))"
+      - "traefik.http.routers.containerui.rule=Host(`$DOMAIN`) && (PathPrefix(`/vm`) && !Path(`/vm/socket`))"
       - "traefik.http.routers.containerui.middlewares=auth_then_strip,errorcats"
     networks:
       - frontend
@@ -112,7 +113,7 @@ services:
     labels:
       - "traefik.port=8085"
       # - "traefik.http.routers.vscodehost.entrypoints=web"
-      - "traefik.http.routers.vscodehost.rule=Path(`/vm/socket`) || (PathPrefix(`/api/machine`))"
+      - "traefik.http.routers.vscodehost.rule=Host(`$DOMAIN`) && Path(`/vm/socket`) || (PathPrefix(`/api/machine`))"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
       - "traefik.http.routers.vscodehost.tls.certResolver=myresolver"
     networks:
