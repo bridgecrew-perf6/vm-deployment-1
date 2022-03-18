@@ -40,6 +40,7 @@ services:
     labels:
       - traefik.http.routers.login.middlewares=errorcats
       - traefik.http.routers.login.rule=(Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
+      - traefik.http.routers.login.tls.certResolver=myresolver
     networks:
       - frontend
 
