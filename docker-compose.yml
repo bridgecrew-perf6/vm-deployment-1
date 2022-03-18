@@ -35,7 +35,7 @@ services:
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
       - traefik.http.routers.login.middlewares=errorcats
-      - traefik.http.routers.login.rule=(Path(`/login`) && Method(`POST`)) || (Path(`/logout`))
+      - traefik.http.routers.login.rule=(Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
     networks:
       - frontend
 
