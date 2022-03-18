@@ -75,7 +75,7 @@ services:
     container_name: frontpage
     image: thallosaurus.de/cyberpsych0siis/frontpage:dev
     labels:
-      - "traefik.http.routers.frontpage.middlewares=cors,target_is_static,errorcats"
+      - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
       - "traefik.http.routers.frontpage.rule=Host(`$DOMAIN`) && PathPrefix(`/`)"
       - "traefik.http.routers.frontpage.tls.certresolver=myresolver"
     networks:
