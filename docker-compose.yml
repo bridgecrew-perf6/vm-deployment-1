@@ -24,12 +24,12 @@ services:
       - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
       - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
       - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm,/_logs"
-      - "traefik.http.middlewares.auth_then_strip.chain.middlewares=cors,auth,target_is_static"
+      - "traefik.http.middlewares.auth_then_strip.chain.middlewares=auth,target_is_static"
       - "traefik.http.middlewares.vscode-uuid-strip.stripprefixregex.regex=/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
-      - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
-      - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=https://$DOMAIN"
-      - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.cors.headers.addvaryheader=true"
+      # - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
+      # - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=https://$DOMAIN"
+      # - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
+      # - "traefik.http.middlewares.cors.headers.addvaryheader=true"
     ports:
       - "80:80"
       - "8080:8080"
@@ -55,7 +55,7 @@ services:
     container_name: loginui
     image: thallosaurus.de/cyberpsych0siis/logon-ui:dev
     labels:
-      - "traefik.http.routers.loginui.middlewares=cors,target_is_static"
+      - "traefik.http.routers.loginui.middlewares=target_is_static"
       - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && PathPrefix(`/login`) && Method(`GET`)"
       - "traefik.http.routers.loginui.tls.certresolver=myresolver"
     networks:
