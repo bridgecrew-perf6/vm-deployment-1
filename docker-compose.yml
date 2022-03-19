@@ -2,7 +2,7 @@ version: '2'
 
 services:
   edge:
-    image: traefik:v2.6
+    image: traefik:v2.6.1
     command:
       - --log.level=DEBUG
       - --pilot.token=$TRAEFIK_PILOT
