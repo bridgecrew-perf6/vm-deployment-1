@@ -10,15 +10,6 @@ services:
       - --accesslog.filepath=/var/log/access.log
       - --entryPoints.web.address=$TRAEFIK_HTTP_LISTEN_HOST:$TRAEFIK_HTTP_LISTEN_PORT
       - --entryPoints.web.forwardedHeaders.insecure=true
-      #- --entrypoints.web.http.redirections.entryPoint.to=websecure
-      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # - --entrypoints.web.http.redirections.entrypoint.permanent=true
-      - --entryPoints.websecure.address=$TRAEFIK_HTTPS_LISTEN_HOST:$TRAEFIK_HTTPS_LISTEN_PORT
-      - --certificatesresolvers.myresolver.acme.httpchallenge=true
-      - --certificatesresolvers.myresolver.acme.email=$LETS_ENCRYPT_EMAIL
-      - --certificatesresolvers.myresolver.acme.storage=acme.json
-      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
-      # - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --api.dashboard=true
       - --api.insecure=true
       - --providers.docker
@@ -39,10 +30,6 @@ services:
       - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm,/_logs,/portainer"
       - "traefik.http.middlewares.auth_then_strip.chain.middlewares=auth,target_is_static"
       - "traefik.http.middlewares.vscode-uuid-strip.stripprefixregex.regex=/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=https://$DOMAIN"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
-      # - "traefik.http.middlewares.cors.headers.addvaryheader=true"
 
     ports:
       - "80:80"
@@ -59,11 +46,12 @@ services:
     container_name: authserver
     image: thallosaurus.de/cyberpsych0siis/authserver:dev
     labels:
-      - traefik.http.routers.login.middlewares=errorcats
-      - traefik.http.routers.login.rule=Host(`$DOMAIN`) && (Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
-      - traefik.http.routers.login.tls.certresolver=cloudflare
-      - traefik.http.routers.login.tls.domains[0].main=$DOMAIN
-      - traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN
+      - "traefik.port=9000"
+      - "traefik.http.routers.login.middlewares=errorcats"
+      - "traefik.http.routers.login.rule=Host(`$DOMAIN`) && (Path(`/login`) && !Method(`GET`)) || (Path(`/logout`)))"
+      - "traefik.http.routers.login.tls.certresolver=cloudflare"
+      - "traefik.http.routers.login.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN"
 
     networks:
       - frontend
@@ -74,8 +62,6 @@ services:
     labels:
       - "traefik.http.routers.loginui.middlewares=target_is_static"
       - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && PathPrefix(`/login`) && Method(`GET`)"
-      #- "traefik.http.routers.loginui.tls.certresolver=myresolver"
-
       - "traefik.http.routers.loginui.tls.certresolver=cloudflare"
       - "traefik.http.routers.loginui.tls.domains[0].main=$DOMAIN"
       - "traefik.http.routers.loginui.tls.domains[0].sans=*.$SUBDOMAIN"
@@ -114,12 +100,9 @@ services:
     labels:
       - "traefik.http.routers.userarea.rule=Host(`$DOMAIN`) && PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
-#      - "traefik.http.routers.userarea.tls.certresolver=myresolver"
-
-      - traefik.http.routers.login.tls.certresolver=cloudflare
-      - traefik.http.routers.login.tls.domains[0].main=$DOMAIN
-      - traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN
-
+      - "traefik.http.routers.login.tls.certresolver=cloudflare"
+      - "traefik.http.routers.login.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN"
     networks:
       - frontend
 
@@ -127,14 +110,11 @@ services:
     container_name: dockerui
     image: thallosaurus.de/cyberpsych0siis/container-gui:main
     labels:
-     # - "traefik.http.routers.containerui.tls.certresolver=myresolver"
       - "traefik.http.routers.containerui.rule=Host(`$DOMAIN`) && (PathPrefix(`/vm`) && !Path(`/vm/socket`))"
       - "traefik.http.routers.containerui.middlewares=auth_then_strip,errorcats"
-
-      - traefik.http.routers.containerui.tls.certresolver=cloudflare
-      - traefik.http.routers.containerui.tls.domains[0].main=$DOMAIN
-      - traefik.http.routers.containerui.tls.domains[0].sans=*.$SUBDOMAIN
-
+      - "traefik.http.routers.containerui.tls.certresolver=cloudflare"
+      - "traefik.http.routers.containerui.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.containerui.tls.domains[0].sans=*.$SUBDOMAIN"
     networks:
       - frontend
 
@@ -151,7 +131,6 @@ services:
       - "DOCKER_REGISTRY_PASSWORD=$DOCKER_REGISTRY_PASSWORD"
       - "DOCKER_REGISTRY_ADDRESS=$DOCKER_REGISTRY_ADDRESS"
       - "DOCKER_REGISTRY_EMAIL=$DOCKER_REGISTRY_EMAIL"
-#      - "BOOTSTRAP=/opt/code-server --port 8080 --host 0.0.0.0 --base-path $ENDPOINT_BASE_URI"
     labels:
       - "traefik.port=8085"
       # - "traefik.http.routers.vscodehost.entrypoints=web"
