@@ -101,9 +101,9 @@ services:
     labels:
       - "traefik.http.routers.userarea.rule=Host(`$DOMAIN`) && PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
-      - "traefik.http.routers.login.tls.certresolver=cloudflare"
-      - "traefik.http.routers.login.tls.domains[0].main=$DOMAIN"
-      - "traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN"
+      - "traefik.http.routers.userarea.tls.certresolver=cloudflare"
+      - "traefik.http.routers.userarea.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.userarea.tls.domains[0].sans=*.$SUBDOMAIN"
     networks:
       - frontend
 
