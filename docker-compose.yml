@@ -22,6 +22,11 @@ services:
       - --api.dashboard=true
       - --api.insecure=true
       - --providers.docker
+      - --certificatesresolvers.cloudflare.acme.email=$LETS_ENCRYPT_EMAIL
+      - --certificatesresolvers.cloudflare.acme.storage=acme.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+
     labels:
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
       - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
@@ -33,11 +38,7 @@ services:
       # - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=https://$DOMAIN"
       # - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
       # - "traefik.http.middlewares.cors.headers.addvaryheader=true"
-#      - "traefik.http.routers.portainer.rule=Path(`/portainer`)"
-#      - "traefik.http.routers.portainer.service=portainer"
-#      - "traefik.http.routers.portainer.entrypoints=websecure"
-#      - "traefik.http.services.portainer.loadbalance.servers=portainer:9443"
-#      - "traefik.http.routers.portainer.middlewares=target_is_static"
+
     ports:
       - "80:80"
       - "8080:8080"
