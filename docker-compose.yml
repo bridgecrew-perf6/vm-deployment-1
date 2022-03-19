@@ -49,7 +49,7 @@ services:
     labels:
       - "traefik.port=9000"
       - "traefik.http.routers.login.middlewares=errorcats"
-      - "traefik.http.routers.login.rule=Host(`$DOMAIN`) && (Path(`/login`) && !Method(`GET`)) || (Path(`/logout`)))"
+      - "traefik.http.routers.login.rule=Host(`$DOMAIN`) && ((Path(`/login`) && !Method(`GET`)) || (Path(`/logout`)))"
       - "traefik.http.routers.login.tls.certresolver=cloudflare"
       - "traefik.http.routers.login.tls.domains[0].main=$DOMAIN"
       - "traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN"
