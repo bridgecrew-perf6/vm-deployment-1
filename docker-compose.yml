@@ -26,6 +26,9 @@ services:
       - --certificatesresolvers.cloudflare.acme.storage=acme.json
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+    environment:
+      - $CF_API_EMAIL
+      - $CF_API_KEY
 
     labels:
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
@@ -56,7 +59,10 @@ services:
     labels:
       - traefik.http.routers.login.middlewares=errorcats
       - traefik.http.routers.login.rule=Host(`$DOMAIN`) && (Path(`/login`) && (Method(`OPTIONS`) || Method(`POST`))) || (Path(`/logout`)) || (Path(`/signup`))
-      - traefik.http.routers.login.tls.certresolver=myresolver
+      - traefik.http.routers.login.tls.certresolver=cloudflare
+      - traefik.http.routers.login.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN
+
     networks:
       - frontend
 
@@ -66,7 +72,12 @@ services:
     labels:
       - "traefik.http.routers.loginui.middlewares=target_is_static"
       - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && PathPrefix(`/login`) && Method(`GET`)"
-      - "traefik.http.routers.loginui.tls.certresolver=myresolver"
+      #- "traefik.http.routers.loginui.tls.certresolver=myresolver"
+
+      - "traefik.http.routers.loginui.tls.certresolver=cloudflare"
+      - "traefik.http.routers.loginui.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.loginui.tls.domains[0].sans=*.$SUBDOMAIN"
+
     networks:
       - frontend
 
@@ -86,7 +97,12 @@ services:
     labels:
       - "traefik.http.routers.frontpage.middlewares=target_is_static,errorcats"
       - "traefik.http.routers.frontpage.rule=Host(`$DOMAIN`) && PathPrefix(`/`)"
-      - "traefik.http.routers.frontpage.tls.certresolver=myresolver"
+     # - "traefik.http.routers.frontpage.tls.certresolver=myresolver"
+
+      - traefik.http.routers.frontpage.tls.certresolver=cloudflare
+      - traefik.http.routers.frontpage.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.frontpage.tls.domains[0].sans=*.$SUBDOMAIN
+
     networks:
       - frontend
 
@@ -96,7 +112,12 @@ services:
     labels:
       - "traefik.http.routers.userarea.rule=Host(`$DOMAIN`) && PathPrefix(`/user`)"
       - "traefik.http.routers.userarea.middlewares=auth_then_strip,errorcats"
-      - "traefik.http.routers.userarea.tls.certresolver=myresolver"
+#      - "traefik.http.routers.userarea.tls.certresolver=myresolver"
+
+      - traefik.http.routers.login.tls.certresolver=cloudflare
+      - traefik.http.routers.login.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN
+
     networks:
       - frontend
 
@@ -104,9 +125,14 @@ services:
     container_name: dockerui
     image: thallosaurus.de/cyberpsych0siis/container-gui:main
     labels:
-      - "traefik.http.routers.containerui.tls.certresolver=myresolver"
+     # - "traefik.http.routers.containerui.tls.certresolver=myresolver"
       - "traefik.http.routers.containerui.rule=Host(`$DOMAIN`) && (PathPrefix(`/vm`) && !Path(`/vm/socket`))"
       - "traefik.http.routers.containerui.middlewares=auth_then_strip,errorcats"
+
+      - traefik.http.routers.containerui.tls.certresolver=cloudflare
+      - traefik.http.routers.containerui.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.containerui.tls.domains[0].sans=*.$SUBDOMAIN
+
     networks:
       - frontend
 
@@ -129,7 +155,10 @@ services:
       # - "traefik.http.routers.vscodehost.entrypoints=web"
       - "traefik.http.routers.vscodehost.rule=Host(`$DOMAIN`) && Path(`/vm/socket`) || (PathPrefix(`/api/machine`))"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
-      - "traefik.http.routers.vscodehost.tls.certresolver=myresolver"
+     # - "traefik.http.routers.vscodehost.tls.certresolver=myresolver"
+      - traefik.http.routers.vscodehost.tls.certresolver=cloudflare
+      - traefik.http.routers.vscodehost.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.vscodehost.tls.domains[0].sans=*.$SUBDOMAIN
     networks:
       - frontend
 networks:
