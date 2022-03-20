@@ -14,7 +14,7 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entryPoints.websecure.address=$TRAEFIK_HTTPS_LISTEN_HOST:$TRAEFIK_HTTPS_LISTEN_PORT
       - --api.dashboard=true
-      - --api.insecure=true
+      # - --api.insecure=true
       - --providers.docker
       - --certificatesresolvers.cloudflare.acme.email=$LETS_ENCRYPT_EMAIL
       - --certificatesresolvers.cloudflare.acme.storage=acme.json
