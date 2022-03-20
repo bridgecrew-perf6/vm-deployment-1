@@ -32,7 +32,7 @@ services:
       - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm,/_logs,/portainer"
       - "traefik.http.middlewares.auth_then_strip.chain.middlewares=auth,target_is_static"
       - "traefik.http.middlewares.vscode-uuid-strip.stripprefixregex.regex=/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
-      - "traefik.http.routers.traefik_https.rule=Host(`dashboard.$DOMAIN`) && (Path(`/dashboard`) || Path(`/api`))"
+      - "traefik.http.routers.traefik_https.rule=(Path(`/dashboard`) || Path(`/api`))"
       - "traefik.http.routers.traefik_https.entrypoints=websecure"
       - "traefik.http.routers.traefik_https.tls=true"
       - "traefik.http.routers.traefik_https.tls.certResolver=cloudflare"
