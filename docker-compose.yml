@@ -27,6 +27,7 @@ services:
       - CLOUDFLARE_DNS_API_TOKEN=$CLOUDFLARE_DNS_API_TOKEN
       - CLOUDFLARE_ZONE_API_TOKEN=$CLOUDFLARE_ZONE_API_TOKEN
     labels:
+      - "traefik.enable=true"
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
       - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
       - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
