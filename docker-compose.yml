@@ -154,7 +154,22 @@ services:
     networks:
       - frontend
 
+  userdb:
+    image: mariadb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MARIADB_USER=$MARIADB_USER
+      - MARIADB_PASSWORD=$MARIADB_PASSWORD
+      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
+    networks:
+      - sql
+   
+volumes:
+  mysql_data:
+
 networks:
   vm:
     external: true
   frontend:
+  sql:
