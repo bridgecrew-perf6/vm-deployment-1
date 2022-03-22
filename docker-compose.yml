@@ -72,11 +72,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.loginui.middlewares=target_is_static"
-      - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && PathPrefix(`/login`) && Method(`GET`)"
+      - "traefik.http.routers.loginui.rule=Host(`$DOMAIN`) && (PathPrefix(`/login`) && Method(`GET`))"
       - "traefik.http.routers.loginui.tls.certresolver=cloudflare"
       - "traefik.http.routers.loginui.tls.domains[0].main=$DOMAIN"
       - "traefik.http.routers.loginui.tls.domains[0].sans=*.$SUBDOMAIN"
-
     networks:
       - frontend
 
@@ -147,15 +146,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=8085"
-      # - "traefik.http.routers.vscodehost.entrypoints=web"
       - "traefik.http.routers.vscodehost.rule=Host(`$DOMAIN`) && Path(`/vm/socket`) || (PathPrefix(`/api/machine`))"
       - "traefik.http.routers.vscodehost.middlewares=auth_then_strip,errorcats"
-     # - "traefik.http.routers.vscodehost.tls.certresolver=myresolver"
-      - traefik.http.routers.vscodehost.tls.certresolver=cloudflare
-      - traefik.http.routers.vscodehost.tls.domains[0].main=$DOMAIN
-      - traefik.http.routers.vscodehost.tls.domains[0].sans=*.$SUBDOMAIN
+      - "traefik.http.routers.vscodehost.tls.certresolver=cloudflare"
+      - "traefik.http.routers.vscodehost.tls.domains[0].main=$DOMAIN"
+      - "traefik.http.routers.vscodehost.tls.domains[0].sans=*.$SUBDOMAIN"
     networks:
       - frontend
+
 networks:
   vm:
     external: true
