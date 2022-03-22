@@ -16,7 +16,7 @@ services:
       - --api.dashboard=true
       - --api.insecure=true
       - --providers.docker
-      - --providers.docker.exposedByDefault=false
+      # - --providers.docker.exposedByDefault=false
       - --certificatesresolvers.cloudflare.acme.email=$LETS_ENCRYPT_EMAIL
       - --certificatesresolvers.cloudflare.acme.storage=acme.json
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
