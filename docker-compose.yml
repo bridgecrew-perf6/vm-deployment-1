@@ -61,6 +61,7 @@ services:
       - frontend
       - sql
     environment:
+      - MARIADB_HOST=$MARIADB_HOST
       - MARIADB_USER=$MARIADB_USER
       - MARIADB_PASSWORD=$MARIADB_PASSWORD
       - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
@@ -154,6 +155,7 @@ services:
       - frontend
 
   userdb:
+    container_name: $MARIADB_HOST
     image: mariadb
     volumes:
       - mysql_data:/var/lib/mysql
