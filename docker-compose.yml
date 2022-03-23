@@ -29,7 +29,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
-      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
+      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session, Access-Control-Allow-Origin"
       - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
       # - "traefik.http.middlewares.auth.forwardauth.tls=true"
       - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm,/_logs,/portainer"
