@@ -59,6 +59,11 @@ services:
       - "traefik.http.routers.login.tls.domains[0].sans=*.$SUBDOMAIN"
     networks:
       - frontend
+      - sql
+    environment:
+      - MARIADB_USER=$MARIADB_USER
+      - MARIADB_PASSWORD=$MARIADB_PASSWORD
+      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
 
   loginui:
     container_name: loginui
