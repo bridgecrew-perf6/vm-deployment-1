@@ -29,8 +29,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.auth.forwardauth.address=$AUTH_ENDPOINT"
-      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session, Access-Control-Allow-Origin"
-      - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location"
+      - "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Cookie, X-Session"
+      - "traefik.http.middlewares.auth.forwardauth.authRequestHeaders=Accept, Cookie, Authorization, Location, Access-Control-Allow-Origin"
       # - "traefik.http.middlewares.auth.forwardauth.tls=true"
       - "traefik.http.middlewares.target_is_static.stripprefix.prefixes=/login,/user,/vm,/_logs,/portainer"
       - "traefik.http.middlewares.auth_then_strip.chain.middlewares=auth,target_is_static"
@@ -39,12 +39,6 @@ services:
       - "traefik.http.middlewares.testcors.headers.accesscontrolalloworigin=https://$DOMAIN,http://localhost:*"
       - "traefik.http.middlewares.testcors.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.testcors.headers.addvaryheader=true"
-      # - "traefik.http.routers.traefik_https.rule=(Path(`/dashboard`) || Path(`/api`))"
-      # - "traefik.http.routers.traefik_https.entrypoints=websecure"
-      # - "traefik.http.routers.traefik_https.tls=true"
-      # - "traefik.http.routers.traefik_https.tls.certResolver=cloudflare"
-      # - "traefik.http.routers.traefik_https.tls.domains[0].main=$DOMAIN"
-      # - "traefik.http.routers.traefik_https.service=api@internal"
     ports:
       - "80:80"
       - "8080:8080"
